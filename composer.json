@@ -1,0 +1,39 @@
+{
+  "name": "code4mk/lara-coupon",
+  "description": "Easily create coupons with lara-coupon",
+  "keywords": [
+    "coupon",
+    "promo-code",
+    "discount",
+    "voucher",
+    "code4mk",
+    "0devco"
+  ],
+  "homepage": "https://github.com/code4mk/lara-coupon",
+  "support": {
+    "issues": "https://github.com/code4mk/lara-coupon/issues",
+    "source": "https://github.com/code4mk/lara-coupon"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "code4mk",
+      "email": "hiremostafa@gmail.com",
+      "website": "https://code4mk.org"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Code4mk\\LaraCoupon\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+        "providers": [
+            "Code4mk\\LaraCoupon\\LaraCouponServiceProvider"
+        ]
+    }
+  },
+  "prefer-stable": true,
+  "minimum-stability": "dev"
+}
