@@ -1,5 +1,4 @@
 <?php
-
 namespace Code4mk\LaraCoupon;
 
 /**

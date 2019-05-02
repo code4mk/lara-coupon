@@ -1,6 +1,11 @@
 <?php
-
 namespace Code4mk\LaraCoupon;
+
+/**
+ * @author    @code4mk <hiremostafa@gmail.com>
+ * @author    @0devco <with@0dev.co>
+ * @copyright 0dev.co (https://0dev.co)
+ */
 
 use Code4mk\LaraCoupon\Model\Coupon as LaraPromo;
 use Illuminate\Http\Request;
@@ -10,18 +15,16 @@ use DateTime;
 
 class Coupon
 {
-  public $status;
-  public $type;
-  public $isProduct = false;
-  public $isUser = false;
-  public $codePrefix = true;
-
+  private $status;
+  private $isProduct = false;
+  private $isUser = false;
+  private $codePrefix = true;
 
   public function create($authUser)
   {
     $expiredDate = new DateTime();
     $expiredDate->add(new DateInterval("PT12M"));
-
+    // create a coupon
     $coupon = new LaraPromo;
     if(\Request::get('code')){
       $coupon->code = \Request::get('code');
@@ -32,8 +35,6 @@ class Coupon
         $coupon->code = Keygen::bytes(10)->hex()->generate('');
       }
     }
-
-
     $coupon->type = \Request::get('type');
     $coupon->amount = \Request::get('amount');
     $coupon->issuer = $authUser;
@@ -48,7 +49,6 @@ class Coupon
       $coupon->is_product = true;
     }
     $coupon->save();
-
   }
 
   public function lists()
@@ -85,20 +85,17 @@ class Coupon
     $coupon->delete();
   }
 
-
-
   public function check($code,$authUser=0)
   {
-
     $instaceTime = new DateTime();
     $currentTimeAmp = $instaceTime->getTimestamp();
-
+    // check coupon
     $coupon = LaraPromo::where('code',$code)
                     ->where('is_active',true)
                     ->where('expire','>',$currentTimeAmp)
                     ->first();
     if(!is_null($coupon)){
-      //return $coupon;
+      // specific product's coupon
       if($coupon->is_product){
         if($coupon->product_id == \Request::get('product_id')){
           // next condition check user
@@ -111,9 +108,9 @@ class Coupon
           return $coupon_data;
         }
       }
-
+      // specific user's coupon
       if($coupon->is_user){
-        if($coupon->user_id === 12){
+        if($coupon->user_id == \Request::get('user_id')){
           // next condition check user
           $this->status = true;
           $this->isUser = true;
@@ -124,14 +121,12 @@ class Coupon
           return $coupon_data;
         }
       }
-
     }else{
       $coupon_data = [
         'status' => false
       ];
       return $coupon_data;
     }
-    $this->type = $coupon->type;
      $promoDatas = [
       "status" => true,
       "type" => $coupon->type,
