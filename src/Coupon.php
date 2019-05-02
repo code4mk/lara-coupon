@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Keygen\Keygen;
 use DateInterval;
 use DateTime;
-
+use DB;
 class Coupon
 {
   private $status;
@@ -35,6 +35,11 @@ class Coupon
         $coupon->code = Keygen::bytes(10)->hex()->generate('');
       }
     }
+    if(\Request::get('quantity')){
+      $coupon->quantity = \Request::get('quantity');
+      $coupon->is_quantity = true;
+      $coupon->usedq = 0;
+    }
     $coupon->type = \Request::get('type');
     $coupon->amount = \Request::get('amount');
     $coupon->issuer = $authUser;
@@ -49,6 +54,27 @@ class Coupon
       $coupon->is_product = true;
     }
     $coupon->save();
+  }
+
+  public function redeam($code)
+  {
+
+
+    DB::transaction(function () use($code){
+      $coupon = LaraPromo::where('code',$code)->first();
+      $coupon->usedq = $coupon->usedq + 1;
+      $coupon->save();
+    });
+  }
+
+  public function unredeam($code)
+  {
+
+    DB::transaction(function () use($code){
+      $coupon = LaraPromo::where('code',$code)->first();
+      $coupon->usedq = $coupon->usedq - 1;
+      $coupon->save();
+    });
   }
 
   public function lists()
@@ -114,6 +140,19 @@ class Coupon
           // next condition check user
           $this->status = true;
           $this->isUser = true;
+        }else{
+          $coupon_data = [
+            'status' => false
+          ];
+          return $coupon_data;
+        }
+      }
+      // check coupon quantity
+      if($coupon->is_quantity){
+        if($coupon->usedq <= $coupon->quantity){
+          // next condition check user
+          $this->status = true;
+          $this->isProduct = true;
         }else{
           $coupon_data = [
             'status' => false

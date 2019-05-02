@@ -21,10 +21,13 @@ class CreateLaraCouponTable extends Migration
           $table->integer('issuer')->nullable();
           $table->integer('product_id')->nullable();
           $table->integer('user_id')->nullable();
+          $table->integer('quantity')->nullable();
+          $table->integer('usedq')->nullable();
           $table->boolean('is_user')->default(false);
           $table->boolean('is_product')->default(false);
           $table->boolean('is_active')->default(true);
           $table->boolean('is_used')->nullable();
+          $table->boolean('is_quantity')->default(false)->nullable();
           $table->integer('expire')->nullable();
           $table->timestamps();
         });
