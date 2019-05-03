@@ -7,6 +7,7 @@ namespace Code4mk\LaraCoupon;
  * @copyright 0dev.co (https://0dev.co)
  */
 
+use Code4mk\LaraCoupon\Model\CouponSingleRedeem;
 use Code4mk\LaraCoupon\Model\Coupon as LaraPromo;
 use Illuminate\Http\Request;
 use Keygen\Keygen;
@@ -18,6 +19,8 @@ class Coupon
   private $status;
   private $isProduct = false;
   private $isUser = false;
+  private $isSingleRedeem = false;
+  private $isQunatity = false;
   private $codePrefix = true;
 
   public function create($authUser)
@@ -56,10 +59,24 @@ class Coupon
     $coupon->save();
   }
 
+  public function singleRedeem($code, $authUser)
+  {
+    $coupon = new CouponSingleRedeem;
+    $coupon->code = $code;
+    $coupon->redeem_user = $authUser;
+    $coupon->save();
+  }
+
+  public function singleUnredeem($code,$authUser)
+  {
+    $coupon =  CouponSingleRedeem::where('code',$code)
+                                  ->where('redeem_user',$authUser)
+                                  ->first();
+    $coupon->delete();
+  }
+
   public function redeam($code)
   {
-
-
     DB::transaction(function () use($code){
       $coupon = LaraPromo::where('code',$code)->first();
       $coupon->usedq = $coupon->usedq + 1;
@@ -69,7 +86,6 @@ class Coupon
 
   public function unredeam($code)
   {
-
     DB::transaction(function () use($code){
       $coupon = LaraPromo::where('code',$code)->first();
       $coupon->usedq = $coupon->usedq - 1;
@@ -123,6 +139,7 @@ class Coupon
     if(!is_null($coupon)){
       // specific product's coupon
       if($coupon->is_product){
+        dd("what");
         if($coupon->product_id == \Request::get('product_id')){
           // next condition check user
           $this->status = true;
@@ -152,7 +169,7 @@ class Coupon
         if($coupon->usedq <= $coupon->quantity){
           // next condition check user
           $this->status = true;
-          $this->isProduct = true;
+          $this->isQunatity = true;
         }else{
           $coupon_data = [
             'status' => false
@@ -160,6 +177,23 @@ class Coupon
           return $coupon_data;
         }
       }
+
+      if($coupon->is_rsingle){
+        $singleCoupon = CouponSingleRedeem::where('redeem_user',$authUser)
+                                ->where('code',$code)
+                                ->first();
+        if(is_null($singleCoupon)){
+          // next condition check user
+          $this->status = true;
+          $this->isSingleRedeem = true;
+        }else{
+          $coupon_data = [
+            'status' => false
+          ];
+          return $coupon_data;
+        }
+      }
+
     }else{
       $coupon_data = [
         'status' => false
@@ -171,6 +205,8 @@ class Coupon
       "type" => $coupon->type,
       "is_product" => $this->isProduct,
       "is_user" => $this->isUser,
+      "is_quantity" => $this->isQunatity,
+      "is_rsingle" => $this->isSingleRedeem,
       "amount" => $coupon->amount
     ];
     return $promoDatas;
