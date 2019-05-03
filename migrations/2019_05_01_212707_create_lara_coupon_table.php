@@ -31,6 +31,13 @@ class CreateLaraCouponTable extends Migration
           $table->integer('expire')->nullable();
           $table->timestamps();
         });
+        // single redeem for general coupon
+        Schema::create('laracoupon_single_redeem', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->integer('redeem_user');
+            $table->string('code');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -41,5 +48,6 @@ class CreateLaraCouponTable extends Migration
     public function down()
     {
         Schema::dropIfExists('lara_coupon');
+        Schema::dropIfExists('laracoupon_single_redeem');
     }
 }
