@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Keygen\Keygen;
 use DateInterval;
 use DateTime;
+use Config;
 use DB;
 class Coupon
 {
@@ -50,6 +51,12 @@ class Coupon
     $coupon->user_id = \Request::get('user_id');
     $coupon->expire = $expiredDate->getTimestamp();
     $coupon->is_active = true;
+    $coupon->is_used = false;
+    if(\Request::get('rsingle')){
+      $coupon->is_rsingle = true;
+    }else{
+      $coupon->is_rsingle = false;
+    }
     if(\Request::get('user_id')){
       $coupon->is_user = true;
     }
@@ -80,6 +87,7 @@ class Coupon
     DB::transaction(function () use($code){
       $coupon = LaraPromo::where('code',$code)->first();
       $coupon->usedq = $coupon->usedq + 1;
+      $coupon->is_used = true;
       $coupon->save();
     });
   }
@@ -89,6 +97,9 @@ class Coupon
     DB::transaction(function () use($code){
       $coupon = LaraPromo::where('code',$code)->first();
       $coupon->usedq = $coupon->usedq - 1;
+      if($coupon->usedq == 0){
+        $coupon->is_used = false;
+      }
       $coupon->save();
     });
   }
