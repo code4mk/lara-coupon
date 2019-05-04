@@ -25,12 +25,12 @@ class Coupon
 
   public function create($authUser)
   {
-    $expiredTime = Config::get('laraCoupon.expired') ? Config::get('laraCoupon.expired') : 'PT12M';
+    $expiredTime = Config::get('laraCoupon.expired') ? Config::get('laraCoupon.expired') : 'P7Y5M4DT4H3M2S';
     $isCodePrefix = Config::get('laraCoupon.isCodePrefix') ? Config::get('laraCoupon.isCodePrefix') : true;
     $codePrefix = Config::get('laraCoupon.codePrefix') ? Config::get('laraCoupon.codePrefix') : 'PM-';
     $codeLenght = Config::get('laraCoupon.codeLenght') ? Config::get('laraCoupon.codeLenght') : 10;
     $expiredDate = new DateTime();
-    $expiredDate->add(new DateInterval());
+    $expiredDate->add(new DateInterval($expiredTime));
     // create a coupon
     $coupon = new LaraPromo;
     if(\Request::get('code')){
