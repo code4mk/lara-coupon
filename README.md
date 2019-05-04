@@ -90,14 +90,14 @@ use KCoupon;
 KCoupon::lists();
 ```
 
-## lists
+## activeLists
 
 ```php
 use KCoupon;
 KCoupon::activeLists();
 ```
 
-## lists
+## deactiveLists
 
 ```php
 use KCoupon;
