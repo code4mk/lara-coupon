@@ -85,7 +85,7 @@ class Coupon
     $coupon->delete();
   }
 
-  public function redeam($code)
+  public function redeem($code)
   {
     DB::transaction(function () use($code){
       $coupon = LaraPromo::where('code',$code)->first();
@@ -95,7 +95,7 @@ class Coupon
     });
   }
 
-  public function unredeam($code)
+  public function unredeem($code)
   {
     DB::transaction(function () use($code){
       $coupon = LaraPromo::where('code',$code)->first();

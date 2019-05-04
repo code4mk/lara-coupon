@@ -54,3 +54,87 @@ KCoupon::create($authUser)
 * redeem one user only one time `?rsingle=true`
 * all products coupon for all user
   * without query `product_id,user_id`
+
+## `singleRedeem()`
+
+```php
+use KCoupon;
+KCoupon::singleRedeem($code, $authUser)
+```
+
+## `singleUnredeem()`
+
+```php
+use KCoupon;
+KCoupon::singleUnredeem($code, $authUser)
+```
+
+## `redeem()`
+
+```php
+use KCoupon;
+KCoupon::redeem($code)
+```
+
+## `unredeam()`
+
+```php
+use KCoupon;
+KCoupon::unredeam($code)
+```
+
+## lists
+
+```php
+use KCoupon;
+KCoupon::lists();
+```
+
+## lists
+
+```php
+use KCoupon;
+KCoupon::activeLists();
+```
+
+## lists
+
+```php
+use KCoupon;
+KCoupon::deactiveLists();
+```
+
+## general
+
+```php
+use KCoupon;
+KCoupon::general();
+```
+
+## `delete`
+
+```php
+use KCoupon;
+KCoupon::delete($code);
+```
+
+## `check`
+
+```php
+use KCoupon;
+KCoupon::check($code,$authUser);
+```
+
+* check return
+
+```php
+"status" => ,
+"type" => ,
+"is_product" => ,
+"is_user" => ,
+"is_quantity" => ,
+"is_rsingle" => ,
+"amount" =>
+```
+
+<a href="https://twitter.com/0devco" target="_blank" ><p align="center" ><img src="https://raw.githubusercontent.com/0devco/docs/master/.devco-images/logo-transparent.png"></p></a>
