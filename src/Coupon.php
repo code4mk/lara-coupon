@@ -22,21 +22,24 @@ class Coupon
   private $isUser = false;
   private $isSingleRedeem = false;
   private $isQunatity = false;
-  private $codePrefix = true;
 
   public function create($authUser)
   {
+    $expiredTime = Config::get('laraCoupon.expired') ? Config::get('laraCoupon.expired') : 'PT12M';
+    $isCodePrefix = Config::get('laraCoupon.isCodePrefix') ? Config::get('laraCoupon.isCodePrefix') : true;
+    $codePrefix = Config::get('laraCoupon.codePrefix') ? Config::get('laraCoupon.codePrefix') : 'PM-';
+    $codeLenght = Config::get('laraCoupon.codeLenght') ? Config::get('laraCoupon.codeLenght') : 10;
     $expiredDate = new DateTime();
-    $expiredDate->add(new DateInterval("PT12M"));
+    $expiredDate->add(new DateInterval());
     // create a coupon
     $coupon = new LaraPromo;
     if(\Request::get('code')){
       $coupon->code = \Request::get('code');
     }else{
-      if($this->codePrefix){
-        $coupon->code = Keygen::bytes(10)->hex()->prefix('PM-')->generate('strtoupper');
+      if($isCodePrefix){
+        $coupon->code = Keygen::bytes($codeLenght)->hex()->prefix($codePrefix)->generate('strtoupper');
       }else{
-        $coupon->code = Keygen::bytes(10)->hex()->generate('');
+        $coupon->code = Keygen::bytes($codeLenght)->hex()->generate('strtoupper');
       }
     }
     if(\Request::get('quantity')){
