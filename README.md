@@ -43,7 +43,7 @@ KCoupon::create($authUser)
 ```
 
 * create method has more request data
-* `code,quantity,type,amount,product_id,user_id,rsingle`
+* `code,quantity,type,amount,product_id,user_id,rsingle,description`
 * if you want auto code that time don't use `code` in request query
 
 * if coupon code will need quantity that time use request query `quantity=integer` as `?quantity=20`

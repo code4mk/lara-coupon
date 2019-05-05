@@ -6,7 +6,7 @@ namespace Code4mk\LaraCoupon\Model;
  * @author    @0devco <with@0dev.co>
  * @copyright 0dev.co (https://0dev.co)
  */
- 
+
 use Illuminate\Database\Eloquent\Model;
 
 class Coupon extends Model
@@ -16,5 +16,5 @@ class Coupon extends Model
      *
      * @var string
      */
-    protected $table = 'lara_coupon';
+    protected $table = 'lara_coupons';
 }

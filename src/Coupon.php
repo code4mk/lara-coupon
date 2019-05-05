@@ -47,6 +47,7 @@ class Coupon
       $coupon->is_quantity = true;
       $coupon->usedq = 0;
     }
+    $coupon->description = \Request::get('description');
     $coupon->type = \Request::get('type');
     $coupon->amount = \Request::get('amount');
     $coupon->issuer = $authUser;

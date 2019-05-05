@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLaraCouponTable extends Migration
+class CreateLaraCouponsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class CreateLaraCouponTable extends Migration
      */
     public function up()
     {
-        Schema::create('lara_coupon', function (Blueprint $table) {
+        Schema::create('lara_coupons', function (Blueprint $table) {
           $table->bigIncrements('id');
+          $table->string('description')->nullable();
           $table->string('code')->unique()->nullable();
           $table->string('type')->nullable();
           $table->float('amount',18,2)->nullable();
@@ -47,7 +48,7 @@ class CreateLaraCouponTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lara_coupon');
+        Schema::dropIfExists('lara_coupons');
         Schema::dropIfExists('laracoupon_single_redeem');
     }
 }
